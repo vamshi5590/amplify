@@ -1,0 +1,7 @@
+---
+applications:
+- name: IOT_TEM_vamshi
+  memory: 750MB
+  disk_quota: 1GB
+  health check type: true  
+  buildpack: staticfile_buildpack 
