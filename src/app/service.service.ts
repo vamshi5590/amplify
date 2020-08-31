@@ -22,6 +22,6 @@ export class ServiceService {
 
   
 postfile( postdata) {
-  return this.http.post('https://iottemp-accountable-jaguar-na.cfapps.io/extract_data', postdata);
+  return this.http.post('https://iottemp.cfapps.io/', postdata);
 }
 }

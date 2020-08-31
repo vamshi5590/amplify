@@ -12,14 +12,22 @@ import { ServiceService } from '../service.service';
 })
 export class IotComponent implements OnInit {
   private subs = new SubSink();
+  palceholder = 'Please upload the data file in CSV format to plot the Chart';
   filesForm = this.formBuilder.group({
     fileToUpload: ['']
   });
   getfile: any;
   data: any;
+  ploturl: any;
+  scatter1 : any;
+  scatter2: any;
+  scatter3: any;
+  linearurl: any;
   file: any;
   datain: number[];
   dataout: number[];
+  showspinner = false;
+  showcanvas = false;
   public lineChartData: ChartDataSets[] = [];
   public lineChartLabels = [];
 
@@ -30,26 +38,43 @@ export class IotComponent implements OnInit {
 
   onFileSelect(event) {
     if (event.target.files.length > 0) {
+      this.showcanvas = false;
       this.file = event.target.files[0];
       this.filesForm.get('fileToUpload').setValue(this.file);
+      this.submitfile();
     }
   }
 
   submitfile() {
+    this.showspinner = true;
     const formData = new FormData();
     formData.append('fileToUpload', this.filesForm.get('fileToUpload').value);
 
     this.subs.sink = this.service.postfile(formData).subscribe(res => {
       this.data = res;
-      // console.log(this.data);
-      this.datain = this.data.data.data_in;
-      this.dataout = this.data.data.data_out;
+       console.log(this.data);
+       this.ploturl = this.data.plot_url;
+       this.linearurl = this.data.linear_url;
+       this.scatter1 = this.data.scatter.scatter1;
+       this.scatter2 = this.data.scatter.scatter2;
+       this.scatter3 = this.data.scatter.scatter3;
 
-     this.lineChartData = [
-      { data: this.datain, label: 'data in ' },
-      { data: this.dataout, label: 'data out' },
-      ];
-      this.lineChartLabels = this.datain
+    //   this.datain = this.data.data.data_in;
+    //   this.dataout = this.data.data.data_out;
+       this.showspinner = false;
+       this.showcanvas = true;
+    //   this.datain = this.datain.map(function(each_element){
+    //     return Number(each_element.toFixed(2));
+    //   });
+    //   this.dataout = this.dataout.map(function(each_element){
+    //     return Number(each_element.toFixed(2));
+    //   });
+    //  this.lineChartData = [
+    //   { data: this.datain, label: 'data in ' },
+    //   { data: this.dataout, label: 'data out' },
+    //   ];
+    //   this.lineChartLabels = this.datain;
+      
       // console.log(this.datain, 'data in',  this.dataout, 'dataout');
     });
   }
@@ -170,10 +195,6 @@ export class IotComponent implements OnInit {
     this.lineChartLabels[2] = ['1st Line', '2nd Line'];
     this.chart.update();
   }
-
-
-
-
 
 
 }

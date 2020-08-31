@@ -1,82 +1,91 @@
-
-<div class="container-fluid ">
-
-
-  <div class="mt-5 mb-5  container " >
-
-    <form class="form-inline" [formGroup]="filesForm"  >
-         <span class="btn btn-primary btn-file mr-sm-2 mr-2  btn-sm  "> 
-           Browse File  
-             <input type="file" (change)="onFileSelect($event)"  name="fileToUpload" >
-    </span> 
-      <button type="submit" class="btn btn-primary my-2 my-sm-0"
-       style="margin-top:25px;padding: 2px;"  (click)="submitfile()" > Submit </button> 
-
-    </form>
-
-  
-  </div> 
-
-
-
-      
-<div class="container col-11"> 
-  <div class="row">
-    <div class="container col-6 ">
-        <div class="flex">
-            <div class="flex-item">
-              <div style="display: block;">
-              <canvas baseChart width="300" height="300"
-                          [datasets]="lineChartData"
-                          [labels]="lineChartLabels"
-                          [options]="lineChartOptions"
-                          [colors]="lineChartColors"
-                          [legend]="lineChartLegend"
-                          [chartType]="lineChartType"
-                          [plugins]="lineChartPlugins"
-                          (chartHover)="chartHovered($event)"
-                          (chartClick)="chartClicked($event)">
-                        
-                    </canvas>
-              </div>
-            </div>
-            <!-- <div class="flex-item">
-              <table class="table table-responsive table-condensed">
-                <tr>
-                  <th *ngFor="let label of lineChartLabels">{{label}}</th>
-                </tr>
-                <tr *ngFor="let d of lineChartData; let i=index" [class]="'line-'+i">
-                  <td *ngFor="let label of lineChartLabels; let j=index">{{d && d.data[j]}}</td>
-                </tr>
-              </table>
-              <button mat-button mat-raised-button color="primary" (click)="randomize()">Randomize</button>
-              <button mat-button mat-raised-button color="primary" (click)="pushOne()">Push</button>
-              <button mat-button mat-raised-button color="primary" (click)="changeColor()">Recolor</button>
-              <button mat-button mat-raised-button color="primary" (click)="hideOne()">Toggle Series B</button>
-              <button mat-button mat-raised-button color="primary" (click)="changeLabel()">Change Label</button>
-            </div> -->
-          </div>
-    
+<div class="container-fluid mb-5  mt-5 "  style="background-color: #f0f2f5;">
+  <div class="container-fluid  bg-white rounded shadow " >
+    <br />
+    <div class="container text-center ">
+      <h3 class="text-info font-weight-bolder text-center  " 
+      >Ojas – Cloud Foundry PoC</h3>
     </div>
 
-    <!-- <div class="container mt-2 mb-5 col-6">
-        <div style="display: block">
-          <canvas  baseChart  width="300" height="300"
-            [datasets]="scatterChartData"
-            [options]="scatterChartOptions"
-            [labels]="scatterChartLabels"
-            [chartType]="scatterChartType">
-          </canvas>
-        </div>
-    </div> -->
+    <div class="d-flex container-fluid  justify-content-end mb-3">
+      <div class="custom-file form-inline d-block col-6 mt-2  mb-5 ">
+        <form [formGroup]="filesForm" >
+         
+          <!-- <input type="file" class="  form-inline " (change)="onFileSelect($event)" name="fileToUpload"> -->
+          <nav class="navbar p-0 ">
+            <a class="navbar-brand"></a>
+            <form class="form-inline">
+              <span class="btn btn-primary btn-file mr-sm-0   btn-sm  "> 
+                <input type="file" (change)="onFileSelect($event)"  name="fileToUpload" >
+          </span>
+        
+            </form>
+          </nav>
+          <label class="font-italic justify-content-end mr-0 " style="font-size: 0.8rem;" >{{palceholder}}</label>
+        
+      </form>
+      </div>
+
+    </div>
+
   
+
+
+<div class="container-fluid  mb-5  "  > 
+  <div class="d-flex justify-content-center mb-4" *ngIf="showspinner">
+    <div class="spinner-border text-info mb-5 " style="width: 2.4rem; height: 2.4rem;" role="status">
+      <span class="sr-only mb-5">Loading...</span>
+    </div>
+  </div>
+  
+
+          <!-- <canvas baseChart  class="col-12"
+                      [datasets]="lineChartData"
+                      [labels]="lineChartLabels"
+                      [options]="lineChartOptions"
+                      [colors]="lineChartColors"
+                      [legend]="lineChartLegend"
+                      [chartType]="lineChartType"
+                      [plugins]="lineChartPlugins"
+                      (chartHover)="chartHovered($event)"
+                      (chartClick)="chartClicked($event)">
+                    
+                </canvas> -->
+
+                <div class="container-fluid justify-content-center"  *ngIf="showcanvas">
+                  <!-- <h4>Visualization</h4>
+                  <p class="font-italic">Distributions of temperatures for all measurements</p> -->
+                  <div class="row">
+                    <div class="col-12 col-xs-12 col-md-6 col-sm-6 col-xl-6">
+                      
+                    <img  class="img-fluid " src="data:image/png;base64,{{ ploturl }}" >
+                    
+                    </div>
+                    <div class="col-12 col-xs-12 col-md-6 col-sm-6 col-xl-6">
+                      <img  class="img-fluid  ml-5" src="data:image/png;base64,{{ scatter1 }}" >
+                    <p class="font-italic text-center ">Relationship between inside and outside temperatures</p>
+                   <p class="font-italic text-center "  style="font-size: 0.9rem;">
+                    We can make a guess that people turn on the conditioner if outside temperature in higher than 35. So,
+                     can say, that inside temperature is in interval [28;35] 
+                     if outside temperature is higher than 35. Lets take a look on piece of data with outside temperature above 35</p>
+                    </div>
+                  </div>
+                  <div class="row justify-content-center">
+                    <div class="col-12 col-xs-12 col-md-4 col-sm-4 col-xl-4">
+                      <img  class="img-fluid " src="data:image/png;base64,{{ scatter2 }}" >
+                      <p class="font-italic text-center mr-0 "  style="font-size: 0.9rem;">But we can see some obvious dependense inside of outside for outisde in interval [25;35].
+                         We defenetly can say that there is no obvious dependence</p>
+                    </div>
+                    <div class="col-12 col-xs-12 col-md-4 col-sm-4 col-xl-4">
+                      <img  class="img-fluid " src="data:image/png;base64,{{ scatter3 }}" >
+                      <p class="font-italic text-center mr-0 "  style="font-size: 0.9rem;">So, after removing from set values with outside temperature above 35,
+                         we can see linear dependence. And we can use linear regression to predict inside temperature with known outside value</p>
+                    </div>
+                    <div class="col-12 col-xs-12 col-md-4 col-sm-4 col-xl-4">
+                  <img  class="img-fluid " src="data:image/png;base64,{{ linearurl }}" >
+                  <h6 class="font-italic text-center mr-0 ">Linear regression</h6>
+                    </div>
+                  </div>
+                </div> 
 </div>
-
-
 </div>
-
-
 </div>
-
-
-
